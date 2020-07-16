@@ -4,6 +4,8 @@ import Keephome from './components/Keephome';
 import InputKeephome from './components/InputKeephome';
 import Image from './components/Image';
 import Form from './components/Form';
+import Search from './components/Search';
+import Location from './components/Location';
 import Login from './components/auth/Login/Login';
 import Register from './components/auth/Register/Registration';
 
@@ -21,6 +23,8 @@ function App() {
         <Route path='/inputkeephome' component={InputKeephome}/>
         <Route path='/image' component={Image}/>
         <Route path='/form' component={Form}/>
+        <Route path='/search' component={Search}/>
+        <Route path='/location' component={Location}/>
 
 
        
