@@ -11,16 +11,14 @@ const initailForm = {
     type: '',
     category: '',
     tel: '',
-    province: '',
-    date: '',
+    province: ''
+  
 
 }
 
 const formReducer = (data = initailForm, action) => {
 
-    switch (action.type) {
-        case 'CHANGE_IMG':
-            return { ...data, img_url: action.img_url }       
+    switch (action.type) {      
         case 'CHANGE_NAME':
             return { ...data, name: action.name }
         case 'CHANGE_DES':
@@ -41,11 +39,10 @@ const formReducer = (data = initailForm, action) => {
             return { ...data, tel: action.tel }
         case 'CHANGE_PROVINCE':
             return { ...data, province: action.province}
-        case 'CHANGE_DATE':
-            return { ...data, date: action.date }
-        
+
+        default: return data
                 }           
-            return data
+            
 }
 
 const homeReducer = (homes = [], action) => {
@@ -53,6 +50,8 @@ const homeReducer = (homes = [], action) => {
         case 'GET_HOMES':
             return action.homes
         case 'ADD_HOME':
+            return [...homes, action.home]
+        case 'ADD_IMG':
             return [...homes, action.home]
         case 'DELETE_HOME':
             return homes.filter(home => home.id !== +action.id)
@@ -62,9 +61,10 @@ const homeReducer = (homes = [], action) => {
                     return action.home;
                 else return home;
             })
-
-        }
+        default: 
             return homes
+        }
+            
 }
 
 

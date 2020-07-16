@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import {useSelector,useDispatch} from 'react-redux'
 import axios from 'axios'
-import KeephomeList from './KeephomeList';
+// import KeephomeList from './KeephomeList';
 
 const Keephome =()=>{
    
-    const homes = useSelector(state=> state.home);
-    const dispatch = useDispatch()
+  const homes = useSelector(state=> state.home);
+  const form = useSelector(state => state.form)
+  const dispatch = useDispatch()
 
      useEffect(()=>{
         getHomes();
@@ -17,6 +18,12 @@ const Keephome =()=>{
         console.log(result.data)
         dispatch({type:'GET_HOMES',homes: result.data})
       }
+
+     const deleteHomes = async (home) => {
+        await axios.delete(`http://ok-myhome.herokuapp.com/api/edit/${home.id}`)
+       dispatch({ type: 'DELETE_HOME', id: home.id})
+       getHomes();
+     }
 
       
 
@@ -38,7 +45,7 @@ const Keephome =()=>{
                 <td>{home.tel}:tel</td> 
                 <td>{home.province}:province</td> 
                 <td>{home.date}:date</td> 
-                <KeephomeList/>
+                <button onClick={deleteHomes}>Delete</button>
                </div>
                   
                 )

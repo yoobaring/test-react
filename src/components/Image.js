@@ -1,31 +1,72 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import {useDispatch ,useSelector} from 'react-redux';
-
 const Image =()=> {
+    let url = 'http://ok-myhome.herokuapp.com/uploads/upload/:path'   
+    const [image, setImage] = useState([])
+    const [img, setImg_url] = useState([])
+    
 
-    const { image, upload } = props;
+    // useEffect(()=>{
+    //     getImage()
+    // },[])
 
-    const dispatch = useDispatch();
-    const homes = useSelector(state => state.home);
-    const form = useSelector(state => state.form);
+    // const getImage = async () => {
+    //     const result = await axios.get(url)
+    //     setImage(result.data)
+    //     console.log(result.data)
+    // }
 
     const addImage = async () => {
-        console.log(form)
-        const result = await axios.post(`http://ok-myhome.herokuapp.com/uploads/upload/`,form)
-        dispatch({
-            type: 'ADD_IMG', 
-            home: {...form, id: homes.lenght > 0 ? homes[homes.lenght -1] .id+1 : 0 } 
-        })
+        const result = await axios.post(url,{
+            img
+            
+        }) 
+        // getImage()
+      
     }
 
-    return(
-        <div>
-          <td>
-               <input  type="file" onChange={(e) => dispatch({ type: 'CHANGE_IMG', img_url: e.target.value })} />
-          </td>
-          <button onClick={addImage}>CREATE</button>
+    
+    // const printImage = () => {
+    //     if ( image && image.length )
+    //         return image.map((admin,index) => {
+    //             return (
+    //                 <li key={index}>
+    //                    {admin.image} 
+  
+
+    //                 </li>
+    //             )
+             
+    //         })
+    //     else {
+    //         return (<h2>No Keephome </h2>)
+    //     }
+
+    // }
+
+    return (
+        <div >
+{/*            
+                {printImage()} */}
+          <br/>
+            
+            
+
+           <br/>
+                <input 
+                onChange={(e)=> setImage(e.target.value)}
+                type='file'
+                value={image}
+                name='image'
+                placeholder='Enter Image'
+                /><br/>
+
+              
+                 <button  onClick={addImage}>ADD MY HOME</button>  
         </div>
     )
-}
-export default Image
+  
+ }
+
+ export default Image;
+ 

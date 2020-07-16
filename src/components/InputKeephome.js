@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect }  from 'react';
 import {useDispatch ,useSelector} from 'react-redux';
 import axios from 'axios'
-import KeephomeList from './KeephomeList';
+
 
 const InputKeephome =(props) => {
     const { data, onChange } = props;
@@ -9,14 +9,27 @@ const InputKeephome =(props) => {
     const dispatch = useDispatch();
     const homes = useSelector(state => state.home);
     const form = useSelector(state => state.form);
+    console.log(form)
 
-    const addHome = async () => {
-        console.log(form)
-        const result = await axios.post(`http://ok-myhome.herokuapp.com/api/home/`,form)
+    
+    useEffect(()=>{
+        getHomes();
+     },[])
+
+    const getHomes = async () => {
+        const result = await axios.get(`http://ok-myhome.herokuapp.com/api/home`)
+        console.log(result.data)
+        dispatch({type:'GET_HOMES',homes: result.data})
+      }
+
+    const addHomes = async () => {
+
+        await axios.post(`http://ok-myhome.herokuapp.com/api/home/`,form)
         dispatch({
             type: 'ADD_HOME', 
-            home: {...form, id: homes.lenght > 0 ? homes[homes.lenght -1] .id+1 : 0 } 
+            home: {...form} 
         })
+        getHomes();
     }
     return(
         <div>
@@ -49,13 +62,13 @@ const InputKeephome =(props) => {
                     <tr>
                         <td>Price</td>
                         <td>
-                            <input  type="text" onChange={(e) => dispatch({ type: 'CHANGE_PRICE', price: e.target.value })} />
+                            <input  type="number" onChange={(e) => dispatch({ type: 'CHANGE_PRICE', price: e.target.value })} />
                         </td>
                     </tr> 
                     <tr>
                         <td>Area</td>
                         <td>
-                            <input  type="text" onChange={(e) => dispatch({ type: 'CHANGE_AREA', area: e.target.value })} />
+                            <input  type="number" onChange={(e) => dispatch({ type: 'CHANGE_AREA', area: e.target.value })} />
                         </td>
                     </tr> 
                     <tr>
@@ -83,15 +96,9 @@ const InputKeephome =(props) => {
                         </td>
                     </tr> 
                     <tr>
-                        <td>Date</td>
-                        <td>
-                            <input  type="date" onChange={(e) => dispatch({ type: 'CHANGE_DATE', date: e.target.value })} /> <br />
-                        </td>
-                    </tr>
-                    <tr>
                         <td></td>
                         <td>
-                            <button onClick={addHome}>CREATE</button>
+                            <button onClick={addHomes}>CREATE</button>
                         </td>
                     </tr>
                   
