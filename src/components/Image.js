@@ -1,72 +1,66 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
-const Image =()=> {
-    let url = 'http://ok-myhome.herokuapp.com/uploads/upload/:path'   
-    const [image, setImage] = useState([])
-    const [img, setImg_url] = useState([])
+
+
+// const API_BASE = "http://localhost:4444"
+const API_BASE = "https://ok-myhome.herokuapp.com"
+
+
+function submitForm(contentType, data, setResponse) {
+
+    console.log('data ', data);
+
+    axios({
+        url: `${API_BASE}/uploads/upload`,
+        method: 'POST',
+        data: data,
+        headers: {
+            'Content-Type': contentType
+        }
+    }).then((response) => {
+        setResponse(response.data);
+    }).catch((error) => {
+        setResponse("error");
+    })
+}
+
+export default function AddNewhome() {
+
+    const [Files, setFiles] = useState(null)
+    const [result, setResult] = useState([]);
     
 
-    // useEffect(()=>{
-    //     getImage()
-    // },[])
+    function uploadWithFormData() {
+        console.log('data', Files);
 
-    // const getImage = async () => {
-    //     const result = await axios.get(url)
-    //     setImage(result.data)
-    //     console.log(result.data)
-    // }
+        const formData = new FormData();
+        for (let i = 0; i < Files.length; i++) {
+            formData.append(`file`, Files[i])
+        }
 
-    const addImage = async () => {
-        const result = await axios.post(url,{
-            img
-            
-        }) 
-        // getImage()
-      
+       
+
+        submitForm("multipart/form-data", formData, (msg) => 
+        console.log("res",msg));
+        
     }
 
-    
-    // const printImage = () => {
-    //     if ( image && image.length )
-    //         return image.map((admin,index) => {
-    //             return (
-    //                 <li key={index}>
-    //                    {admin.image} 
-  
 
-    //                 </li>
-    //             )
-             
-    //         })
-    //     else {
-    //         return (<h2>No Keephome </h2>)
-    //     }
-
-    // }
+    const printSearchResult = () => {
+        if (result.length <= 0)
+            return (<h2>No Data </h2>)
+        return result.map((admin, index) => (
+            <li key={index}>
+                 {admin.name} 
+            </li>
+        ))
+    }
 
     return (
-        <div >
-{/*            
-                {printImage()} */}
-          <br/>
-            
-            
-
-           <br/>
-                <input 
-                onChange={(e)=> setImage(e.target.value)}
-                type='file'
-                value={image}
-                name='image'
-                placeholder='Enter Image'
-                /><br/>
-
-              
-                 <button  onClick={addImage}>ADD MY HOME</button>  
+        <div>
+            {printSearchResult()}
+            <input type="file"  name="file" onChange={e => setFiles(e.target.files)} multiple />
+            <input type="button" value="Upload as Form" onClick={uploadWithFormData} />
         </div>
     )
-  
- }
-
- export default Image;
- 
+}

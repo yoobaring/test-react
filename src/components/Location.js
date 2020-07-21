@@ -4,35 +4,43 @@ import axios from 'axios'
 
 
 const Location =()=> {
-    const SearchAPI = 'http://ok-myhome.herokuapp.com/search/location'
-    const [search, setSearch] = useState({})
-    const [latitude, setLatitude] = useState('')
-    const [longitude, setLongitude] = useState('')
+    const LocationAPI = 'http://ok-myhome.herokuapp.com/search/location'
+    const [result, setResult] = useState([]);
+    const [location, setLocation] = useState({})
+ 
 
 
     const addSearch = async () => {
-       const res = await axios.post(SearchAPI,{ 
-            latitude, longitude
-       })
-       console.log(res.data)
+       const res = await axios.post(LocationAPI, location)
+       console.log("res", res.data)
+       setResult(res.data)
     }
+
+    
+    const printLocationResult = () => {
+      if (result.length <= 0)
+          return (<h2>No Data </h2>)
+      return result.map((admin, index) => (
+          <li key={index}>
+               {admin.name} 
+          </li>
+      ))
+  }
 
     return(
         <div>
+           {printLocationResult()}
+
              <br/>
                 <input 
-                onChange={(e)=> setLatitude(e.target.value)}
+                onChange={(e)=> setLocation({...location, latitude: e.target.value})}
                 type='text'
-                value={latitude}
-                name='latiitude'
                 placeholder='ลาติจูด'
                 /><br/>
 
                 <input
-                onChange={(e)=> setLongitude(e.target.value)}
+                onChange={(e)=> setLocation({...location, longitude: e.target.value})}
                 type='text'
-                value={longitude}
-                name='longitude'
                 placeholder='ลองติจูด'
                 /><br/>
 
